@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width:400px;">
+<h4 class="text-center mb-3">Edit Expense</h4>
+<form method="POST">
+  <input name="title" value="{{ expense.title }}" class="form-control mb-2">
+  <input name="amount" value="{{ expense.amount }}" type="number" class="form-control mb-2">
+  <select name="category" class="form-control mb-2">
+    {% for c in ["Food","Travel","Bills","Shopping"] %}
+    <option {% if expense.category==c %}selected{% endif %}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <input name="date" value="{{ expense.date }}" type="date" class="form-control mb-3">
+  <button class="btn btn-primary w-100">Update</button>
+</form>
+</div>
+{% endblock %}

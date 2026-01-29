@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width:400px;">
+<h4 class="text-center mb-3">Add Expense</h4>
+<form method="POST">
+  <input name="title" class="form-control mb-2" placeholder="Title" required>
+  <input name="amount" type="number" class="form-control mb-2" placeholder="Amount" required>
+  <select name="category" class="form-control mb-2">
+    <option>Food</option>
+    <option>Travel</option>
+    <option>Bills</option>
+    <option>Shopping</option>
+  </select>
+  <input name="date" type="date" class="form-control mb-3">
+  <button class="btn btn-primary w-100">Save</button>
+</form>
+</div>
+{% endblock %}
