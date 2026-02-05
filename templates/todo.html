@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card p-4 mx-auto" style="max-width:420px;">
+  <h4 class="text-center mb-3">📝 Add Task</h4>
+
+  <!-- Add Task Form -->
+  <form method="POST">
+    <input
+      name="task"
+      class="form-control mb-3"
+      placeholder="Enter task name"
+      required
+    >
+    <button class="btn btn-primary w-100">Add Task</button>
+  </form>
+</div>
+
+<!-- Task List -->
+<div class="card p-4 mx-auto mt-4" style="max-width:600px;">
+  <h5 class="mb-3">Your Tasks</h5>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for t in tasks %}
+      <tr>
+        <td {% if t.status %}style="text-decoration:line-through;color:gray"{% endif %}>
+          {{ t.task }}
+        </td>
+
+        <td>
+          {% if t.status %}
+            <span class="badge bg-success">Done</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pending</span>
+          {% endif %}
+        </td>
+
+        <td>
+          {% if not t.status %}
+            <a href="/todo/done/{{ t.id }}" class="btn btn-sm btn-success">✔</a>
+          {% endif %}
+          <a href="/todo/delete/{{ t.id }}" class="btn btn-sm btn-danger">❌</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

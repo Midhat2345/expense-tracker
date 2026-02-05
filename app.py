@@ -20,6 +20,61 @@ with db() as conn:
         date TEXT
     )
     """)
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS todos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        task TEXT NOT NULL,
+        status INTEGER DEFAULT 0
+    )
+    """)
+
+# -------- TODO LIST ----------
+@app.route("/todo", methods=["GET", "POST"])
+def todo():
+    conn = db()
+
+    if request.method == "POST":
+        conn.execute(
+            "INSERT INTO todos (task) VALUES (?)",
+            (request.form["task"],)
+        )
+        conn.commit()
+
+    tasks = conn.execute("SELECT * FROM todos").fetchall()
+    return render_template("todo.html", tasks=tasks)
+
+
+@app.route("/todo/done/<int:id>")
+def todo_done(id):
+    conn = db()
+    conn.execute("UPDATE todos SET status=1 WHERE id=?", (id,))
+    conn.commit()
+    return redirect("/todo")
+
+
+@app.route("/todo/delete/<int:id>")
+def todo_delete(id):
+    conn = db()
+    conn.execute("DELETE FROM todos WHERE id=?", (id,))
+    conn.commit()
+    return redirect("/todo")
+@app.route("/")
+def index():
+    conn = db()
+    expenses = conn.execute("SELECT * FROM expenses").fetchall()
+
+    total = sum(e["amount"] for e in expenses)
+
+    summary = {}
+    for e in expenses:
+        summary[e["category"]] = summary.get(e["category"], 0) + e["amount"]
+
+    return render_template(
+        "dashboard.html",
+        expenses=expenses,
+        total=total,
+        summary=summary
+    )
 
 # ---------- DASHBOARD ----------
 @app.route("/")
